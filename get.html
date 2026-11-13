@@ -43,6 +43,11 @@
   .card li::marker { color: var(--gold); }
   .card h2 { color: var(--gold); font-size: 23px; margin: 0 0 4px; }
   .about p + p { margin-top: 8px; }
+  .steps { background: #FBEFD2; border-width: 3px; font-size: 20px; }
+  .steps h2 { color: var(--ink); }
+  .steps ol { margin: 4px 0 6px; padding-inline-start: 26px; }
+  .steps li::marker { color: var(--gold); font-weight: 700; }
+  [hidden] { display: none !important; }
   .hint { border: 0; background: transparent; box-shadow: none; text-align: center; font-size: 16px; color: var(--muted); padding: 4px 10px; }
   p { margin: 0; }
   footer { margin-top: 18px; }
@@ -57,6 +62,15 @@
 
   <a class="store" href="https://apps.apple.com/app/id6832192878">حمّله من <span dir="ltr">App Store</span></a>
   <p class="note">متوفر للآيفون حالياً · ونعمل على نسخة الأندرويد</p>
+
+  <div class="card steps" id="inapp" hidden>
+    <h2>الزر لم يفتح؟ خطوتان فقط</h2>
+    <ol>
+      <li>اضغط <b>النقاط الثلاث (•••)</b> أعلى الشاشة.</li>
+      <li>اختر <b>«فتح في المتصفح»</b>، ثم اضغط الزر.</li>
+    </ol>
+    <p>أو ابحث عن <b>«رسالة من القرآن»</b> في App Store.</p>
+  </div>
 
   <div class="card about">
     <h2>عن التطبيق</h2>
@@ -74,9 +88,25 @@
     </ul>
   </div>
 
-  <div class="card hint">
+  <div class="card hint" id="hint">
     <p><b>لم يفتح الزر؟</b> اضغط النقاط الثلاث أعلى الصفحة واختر «فتح في المتصفح»، أو ابحث عن <b>«رسالة من القرآن»</b> في App Store.</p>
   </div>
 </main>
+<script>
+  // Inside TikTok's (or another app's) built-in browser the App Store link is blocked,
+  // so show the "open in browser" steps right under the button. No data is collected or sent.
+  (function () {
+    var ua = navigator.userAgent || '';
+    if (!/musical_ly|tiktok|bytedance|trill|instagram|fban|fbav|snapchat/i.test(ua)) return;
+    document.getElementById('inapp').hidden = false;
+    document.getElementById('hint').hidden = true;
+    var btn = document.querySelector('.store');
+    btn.addEventListener('click', function () {
+      // Also try the App Store app's own link; harmless if the in-app browser ignores it.
+      setTimeout(function () { window.location.href = 'itms-apps://apps.apple.com/app/id6832192878'; }, 300);
+      document.getElementById('inapp').scrollIntoView({behavior: 'smooth', block: 'center'});
+    });
+  })();
+</script>
 </body>
 </html>
