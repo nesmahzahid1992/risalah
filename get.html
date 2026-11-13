@@ -64,10 +64,10 @@
   <p class="note">متوفر للآيفون حالياً · ونعمل على نسخة الأندرويد</p>
 
   <div class="card steps" id="inapp" hidden>
-    <h2>الزر لم يفتح؟ خطوتان فقط</h2>
+    <h2>للتحميل: خطوتان فقط</h2>
     <ol>
       <li>اضغط <b>النقاط الثلاث (•••)</b> أعلى الشاشة.</li>
-      <li>اختر <b>«فتح في المتصفح»</b>، ثم اضغط الزر.</li>
+      <li>اختر <b>«فتح في المتصفح»</b>، ثم اضغط <b>«حمّله من <span dir="ltr">App Store</span>»</b>.</li>
     </ol>
     <p>أو ابحث عن <b>«رسالة من القرآن»</b> في App Store.</p>
   </div>
@@ -93,19 +93,16 @@
   </div>
 </main>
 <script>
-  // Inside TikTok's (or another app's) built-in browser the App Store link is blocked,
-  // so show the "open in browser" steps right under the button. No data is collected or sent.
+  // Inside TikTok's (or another app's) built-in browser the App Store link is blocked (tested 2026-11-13),
+  // so show the "open in browser" steps instead of the button. No data is collected or sent.
   (function () {
     var ua = navigator.userAgent || '';
     if (!/musical_ly|tiktok|bytedance|trill|instagram|fban|fbav|snapchat/i.test(ua)) return;
     document.getElementById('inapp').hidden = false;
     document.getElementById('hint').hidden = true;
-    var btn = document.querySelector('.store');
-    btn.addEventListener('click', function () {
-      // Also try the App Store app's own link; harmless if the in-app browser ignores it.
-      setTimeout(function () { window.location.href = 'itms-apps://apps.apple.com/app/id6832192878'; }, 300);
-      document.getElementById('inapp').scrollIntoView({behavior: 'smooth', block: 'center'});
-    });
+    // The button cannot open the App Store from here, so the steps take its place.
+    // (TikTok only: the other apps are untested, so they keep the button and get the steps too.)
+    if (/musical_ly|tiktok|bytedance|trill/i.test(ua)) document.querySelector('.store').hidden = true;
   })();
 </script>
 </body>
